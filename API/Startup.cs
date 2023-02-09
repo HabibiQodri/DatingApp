@@ -1,6 +1,7 @@
 using System.Text;
 using API.Data;
 using API.Interfaces;
+using API.Middleware;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -25,7 +26,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers();  
             services.AddDbContext<DataContext>(opt => {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));    
             });
@@ -43,7 +44,8 @@ namespace API
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        {   
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -52,6 +54,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
              

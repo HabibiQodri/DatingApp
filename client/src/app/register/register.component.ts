@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class RegisterComponent implements OnInit {
   // @Input() usersFromHomeComp: any;
+  validationErrors: string[] = [];
   @Output() cancelRegister = new EventEmitter();
   model: any = {}
   constructor(private accountService: AccountService,private toastr: ToastrService) { }
@@ -19,8 +20,10 @@ export class RegisterComponent implements OnInit {
   register(){
     this.accountService.register(this.model).subscribe({
       next: () => this.cancel(),
-      error: error => this.toastr.error(error.error)
-      
+      error: error => {
+        this.validationErrors = error;
+        
+      }
     })
   }
 
