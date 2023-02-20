@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Middleware;
 using API.Services;
@@ -37,6 +38,8 @@ namespace API
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRespository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            services.AddScoped<IPhotoService , PhotoService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
